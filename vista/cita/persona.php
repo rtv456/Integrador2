@@ -456,11 +456,8 @@ $(document).ready(function(){
 			}
 			let table = $('#table-lista').DataTable(); 
 			let data = table.row( current_row).data();
-			
-			
 			let idEspecialidad = data.idPersona;
 						
-			console.log(idEspecialidad);
 			
 			Swal.fire({
 					  title: 'Borrar',

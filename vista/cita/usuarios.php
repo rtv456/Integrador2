@@ -175,7 +175,7 @@
                    <input type="hidden" id="crud">
 									<input type="hidden" id="txtcode">
 									
-									<input type="password" class="form-control" id="txtContrasena" placeholder="">
+									<input type="text" class="form-control" id="txtContrasena" placeholder="">
 									
             </div>
 			

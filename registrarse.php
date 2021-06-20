@@ -140,11 +140,11 @@ session_start();
           <div class="col-8">
             <div class="icheck-primary">
               <input type="checkbox" id="agreeTerms" name="terms" value="agree">
-              <!--
+              
 			  <label for="agreeTerms">
-               I agree to the <a href="#">terms</a>
+               Aceptar <a id="btn-abrir" href="#">Términos y condiciones</a>
               </label>
-			  -->
+			  
             </div>
           </div>
           <!-- /.col -->
@@ -166,8 +166,74 @@ session_start();
     </div>
     <!-- /.form-box -->
   </div><!-- /.card -->
+  
+  
+  
 </div>
 <!-- /.register-box -->
+
+
+
+
+
+	  
+	  <div class="modal fade" id="modal-tc" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Términos y Condiciones</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+			  
+			 
+				
+            </div>
+            <div class="modal-body">
+						
+						
+			
+			
+<p class="text-justify">
+La presente Política de Privacidad establece los términos en que La Clínica Los Olivos usa y protege la información que es proporcionada por sus usuarios al momento de utilizar su portal web. La Clínica Los Olivos está comprometida con la seguridad de los datos de sus usuarios por principio y en virtud al cumplimiento de la Ley de Protección de Datos Personales. Cuando se solicita llenar los campos de información personal con la cual usted puede ser identificado; lo hacemos asegurando que sólo se empleará de acuerdo con los términos de este documento. Sin embargo, esta Política de Privacidad puede cambiar con el tiempo o ser actualizada por lo que le recomendamos y enfatizamos revisar continuamente esta página para asegurarse que está de acuerdo con dichos cambios.<br>
+<br>
+
+<b>Información que es recogida</b><br>
+Nuestro portal web de la Clínica Los Olivos podrá recoger información personal, por ejemplo: Nombre, información de contacto, como su dirección de correo electrónica. Así mismo cuando sea necesario podrá ser requerida información específica para procesar algún pedido o realizar una entrega de resultados médicos.
+Uso de la información recogida
+Nuestro portal web Clínica Los Olivos ha sido creado con la única finalidad de brindar altos estándares de calidad, y para ello emplea la información que recibe con el fin de proporcionar el mejor servicio posible, particularmente para mantener un registro de usuario y así mejorar nuestros servicios. Es posible que sean enviados correos electrónicos periódicamente a través de nuestro portal con ofertas especiales, nuevos productos y otra información publicitaria que consideremos relevante para usted o que pueda brindarle algún beneficio, estos correos electrónicos serán enviados a la dirección que usted proporcione y podrán ser cancelados en cualquier momento. La Clínica Los Olivos está altamente comprometida para cumplir con el compromiso de mantener su información segura. Usamos los sistemas más avanzados y los actualizamos constantemente para asegurarnos que no exista ningún acceso no autorizado.
+<br>
+<br>
+<b>Control de su información personal</b><br>
+En cualquier momento usted puede restringir la recopilación o el uso de la información personal que es proporcionada a nuestro portal web, cada vez que se le solicite rellenar un formulario. Esta compañía no venderá, cederá ni distribuirá la información personal que es recopilada sin su consentimiento, salvo que sea requerido por un juez con un orden judicial. La Clínica Los Olivos se reserva el derecho de cambiar los términos de la presente Política de Privacidad en cualquier momento.
+<br>
+<br>
+<b>Uso de datos Personales</b><br>
+De conformidad con lo establecido en la Ley N° 29733 - Ley de Protección de Datos Personales y su Reglamento, quien suscribe el presente documento, queda informado y da su consentimiento libre, previo, expreso, inequívoco e informado, para el tratamiento y transferencia, nacional e internacional de sus datos personales al banco de datos de titularidad de la Clínica Los, conjuntamente con cualquier otro dato que pudiera facilitarse a lo largo de la relación jurídica y aquellos obtenidos en fuentes accesibles al público, se tratarán con las finalidades de brindar el servicio de atención médica al paciente, analizar las circunstancias al celebrar contratos con la Clínica Los Olivos, gestionar la contratación, evaluar la calidad del servicio y para la realización de estudios estadísticos. Asimismo, la Clínica Los Olivos utilizará los datos personales con fines comerciales y publicitarios a fin de remitir información de los productos y servicios que ofrece la Clínica Los Olivos y considere de su interés. Los datos proporcionados serán incorporados, con las mismas finalidades, a las bases de datos de la Clínica Los Olivos. Los datos suministrados son esenciales para las finalidades indicadas. Las bases de datos donde ellos se almacenan cuentan con estrictas medidas de seguridad. En caso se decida no proporcionarlos, no será posible la prestación de servicios por parte de la Clínica Los Olivos. Conforme a Ley, el titular de la información está facultado a ejercitar los derechos de información, acceso, rectificación, supresión o cancelación y oposición que se detallan en la Ley N° 29733, Ley de Protección de Datos Personales y su Reglamento, mediante comunicación dirigida a la Clínica Los Olivos.
+
+</p>
+
+
+				
+		    
+								
+			  
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              <!--
+			  <button type="button" class="btn btn-primary" id="btn-save">Guardar</button>
+			  -->
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+	  
+	  
+	  
 
 <!-- jQuery -->
 <script src="vista/plugins/jquery/jquery.min.js"></script>
@@ -236,6 +302,22 @@ document.getElementById('documento').setAttribute('maxlength',8);
 					
 
 			$("#btn-save").click(function(){
+				
+
+				if ($('#agreeTerms').is(':checked') ) {
+				
+					   						
+					}else{
+						
+					Swal.fire(
+						  'Error!',
+						  'Acepte los términos y condiciones.',
+						  'error'
+						)
+					return;
+					
+					
+					}
 									  
 				   if (IsEmail($("#correo").val())) {
 					   						
@@ -320,6 +402,13 @@ document.getElementById('documento').setAttribute('maxlength',8);
 					);
 				
 			});
+			
+			
+			$("#btn-abrir").on("click",function() {
+			  $("#modal-tc").modal("show");
+			});
+
+			
 			
 			
 		function showLoadingScreen()
