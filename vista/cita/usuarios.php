@@ -88,7 +88,7 @@
 						  <th>Perfil</th>
                           <th>Persona</th>
                           <th>Usuario</th>
-						  <th>Contraseña</th>
+						  <th class="hide_column">Contraseña</th>
 						
 						  <th>Controles</th>
 						  
@@ -167,7 +167,7 @@
                    <input type="hidden" id="crud">
 									<input type="hidden" id="txtcode">
 									
-									<input type="text" class="form-control" id="txtUsuario" placeholder="">
+									<input type="text" maxlength="60" class="form-control" id="txtUsuario" placeholder="">
 									
             </div>
 			<div class="form-group">
@@ -175,7 +175,7 @@
                    <input type="hidden" id="crud">
 									<input type="hidden" id="txtcode">
 									
-									<input type="text" class="form-control" id="txtContrasena" placeholder="">
+									<input type="password" maxlength="20" class="form-control" id="txtContrasena" placeholder="">
 									
             </div>
 			
@@ -274,7 +274,9 @@
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			  <!--
               <button type="button" class="btn btn-primary" id="btn-save">Guardar</button>
+			  -->
             </div>
           </div>
           <!-- /.modal-content -->
@@ -378,6 +380,11 @@ $(document).ready(function(){
 							"targets": [ 2 ],
 							"visible": false,
 							"searchable": false
+						},
+						{
+							"targets": [ 6 ],
+							"visible": false,
+							"searchable": false
 						}
 					],
 				
@@ -399,7 +406,8 @@ $(document).ready(function(){
 			
 
 			$("#btn-save").click(function(){
-				if($("#txtdescripcion").val() == ''){
+				
+				/*if($("#txtdescripcion").val() == ''){
 			
 					Swal.fire(
 						  'Error!',
@@ -407,15 +415,33 @@ $(document).ready(function(){
 						  'error'
 						)
 					return;
-				}
+				}*/
 				
+				
+				
+								if(
+								(
+								$("#departamentos").val() == ''  ||
+								$("#txtPersonaSeleccionada").val() == ''  ||
+								$("#txtUsuario").val().trim() == ''  ||
+								$("#txtContrasena").val().trim() == ''
+								)
+							  ){
+								Swal.fire(
+									  'Error!',
+									  'Porfavor, complete los campos.',
+									  'error'
+									)
+								return;
+							}
+							
 
 
 				if($("#crud").val() == 'N'){
 					
 					Swal.fire({
 					  title: 'Nuevo',
-					  text: "Crear nuevo Médico ?",
+					  text: "Crear nuevo usuario ?",
 					  icon: 'warning',
 					  showCancelButton: true,
 					  confirmButtonColor: '#3085d6',
@@ -423,7 +449,8 @@ $(document).ready(function(){
 					  confirmButtonText: 'Si, Quiero grabar!'
 					}).then(result => {
 						if (result.value) {
-														
+											
+											
 						 	
 						  add_accion(
 						  $("#hidPersona").val(),
@@ -481,6 +508,9 @@ $(document).ready(function(){
 			
 			
 			
+			$("#buscarModalPersona").removeAttr('disabled');
+			$("#txtUsuario").removeAttr('disabled');
+			
 			$("#hidPersona").val("");
 			$("#txtPersonaSeleccionada").val("");
 			
@@ -516,7 +546,7 @@ $(document).ready(function(){
 					"url": "../../controlador/PersonaControlador.php",
 					"type": "POST",
 					"data" : {
-						method : "buscar_persona",
+						method : "buscar_persona_usuario",
 						nombres:nombreBuscar
 					},
 					error: function (request, textStatus, errorThrown) {
@@ -566,6 +596,11 @@ $(document).ready(function(){
 						    $("#departamentos").val(data.idPerfil);
 							$("#txtUsuario").val(data.usuario);
 							$("#txtContrasena").val(data.contrasena);
+							
+							$("#txtUsuario").attr('disabled','disabled'); 
+							$("#buscarModalPersona").attr('disabled','disabled'); 
+							
+							
 		
 			$("#modal-especialidad").modal("show");
 			
@@ -578,6 +613,7 @@ $(document).ready(function(){
 		});
 
 		$(document).on("click",".btn-hapus",function(){
+			
 			let current_row = $(this).parents('tr'); 
 			if (current_row.hasClass('child')) { 
 				current_row = current_row.prev(); 
@@ -589,7 +625,7 @@ $(document).ready(function(){
 			
 			Swal.fire({
 					  title: 'Borrar',
-					  text: "Borrar usuario ?",
+					  text: "Borrar usuario?",
 					  icon: 'warning',
 					  showCancelButton: true,
 					  confirmButtonColor: '#3085d6',
@@ -654,7 +690,17 @@ $(document).ready(function(){
 		
 		$("#buscarModalPersona").click(function(){
 			
+						
+						/*var table = $('#table-lista-persona').DataTable();
+						table.clear();*/
+						
+						//$('#table-lista-persona').dataTable().clear();
+						$('#table-lista-persona').dataTable().fnClearTable();
+						
+						
 				$("#modal-persona").modal("show");
+				
+				
 				
 		});
 						
@@ -674,7 +720,9 @@ $(document).ready(function(){
 				type: "POST",
 				data: ajax,
 				success: function(data, textStatus, jqXHR)
-				{					
+				{	
+					console.log(data);
+					
 					$resp = JSON.parse(data);
 					
 					if($resp['status'] == true){
@@ -695,7 +743,12 @@ $(document).ready(function(){
 						
 					}else{
 						
-						Swal.fire("Error al grabar el usuario : "+$resp['message']);
+						Swal.fire($resp['message']);
+						/*Swal.fire(
+						  'Info!',
+						  $resp['message'],
+						  'info'
+						)*/
 					}
 					
 				},
@@ -785,7 +838,7 @@ $(document).ready(function(){
 							
 							Swal.fire(
 						  'Success!',
-						 'No se pudo borrar el medico.',
+						 'No se pudo borrar el usuario.',
 						  'success'
 						)
 						}

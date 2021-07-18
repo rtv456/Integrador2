@@ -232,7 +232,9 @@
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			  <!--
               <button type="button" class="btn btn-primary" id="btn-save">Guardar</button>
+			  -->
             </div>
           </div>
           <!-- /.modal-content -->
@@ -348,7 +350,7 @@
 
 			$("#btn-save").click(function(){
 				
-				if($("#txtPersonaSeleccionada").val() == ''){
+				/*if($("#txtPersonaSeleccionada").val() == ''){
 			
 					Swal.fire(
 						  'Error!',
@@ -356,8 +358,24 @@
 						  'error'
 						)
 					return;
-				}
+				}*/
 				
+				
+				if(
+								(
+								$("#txtPersonaSeleccionada").val().trim() == ''
+								)
+							
+							  ){
+						
+								Swal.fire(
+									  'Error!',
+									  'Porfavor, seleccione a la persona.',
+									  'error'
+									)
+								return;
+							}
+							
 
 
 				if($("#crud").val() == 'N'){
@@ -430,7 +448,7 @@
 				
 				
 				$("#txtcode").val("");
-			
+			$("#buscarModalPersona").removeAttr('disabled');
 			
 			$("#hidPersona").val("");
 			$("#txtPersonaSeleccionada").val("");
@@ -466,7 +484,7 @@
 					"url": "../../controlador/PersonaControlador.php",
 					"type": "POST",
 					"data" : {
-						method : "buscar_persona",
+						method : "buscar_persona_paciente",
 						nombres:nombreBuscar
 					},
 					error: function (request, textStatus, errorThrown) {
@@ -513,7 +531,7 @@
 			$("#txtHC").val(data.HC);
 			$("#hidPersona").val(data.idPersona);
 			$("#txtPersonaSeleccionada").val(data.paciente);
-			
+			$("#buscarModalPersona").attr('disabled','disabled'); 
 			$("#txtPersonaSeleccionada").attr('disabled','disabled');
 				$("#txtHC").attr('disabled','disabled'); 
 				
@@ -604,6 +622,8 @@
 		
 		
 		$("#buscarModalPersona").click(function(){
+			
+			$('#table-lista-persona').dataTable().fnClearTable();
 			
 				$("#modal-persona").modal("show");
 				

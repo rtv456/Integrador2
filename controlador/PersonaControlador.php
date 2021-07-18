@@ -16,6 +16,60 @@ if( isset( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && ( $_SERVER['HTTP_X_REQUESTED_W
 	$retval = [];
 	
 	
+	if($method == 'buscar_persona_usuario'){
+			
+		$nombres = $_POST['nombres'];
+		
+		$objdao = new PersonaDao();
+	    $lista = $objdao->BuscarPersonaUsuario($nombres);
+		
+		$retval['status'] = $lista[0];
+		$retval['message'] = $lista[1];
+		$retval['data'] = $lista[2];
+		
+		echo json_encode($retval);
+		
+		
+			
+		}
+		
+		
+		if($method == 'buscar_persona_paciente'){
+			
+		$nombres = $_POST['nombres'];
+		
+		$objdao = new PersonaDao();
+	    $lista = $objdao->BuscarPersonaPaciente($nombres);
+		
+		$retval['status'] = $lista[0];
+		$retval['message'] = $lista[1];
+		$retval['data'] = $lista[2];
+		
+		echo json_encode($retval);
+		
+		
+			
+		}
+		
+		
+		if($method == 'buscar_persona_medico'){
+			
+		$nombres = $_POST['nombres'];
+		
+		$objdao = new PersonaDao();
+	    $lista = $objdao->BuscarPersonaMedico($nombres);
+		
+		$retval['status'] = $lista[0];
+		$retval['message'] = $lista[1];
+		$retval['data'] = $lista[2];
+		
+		echo json_encode($retval);
+		
+		
+			
+		}
+	
+	
 		if($method == 'buscar_persona'){
 			
 		$nombres = $_POST['nombres'];

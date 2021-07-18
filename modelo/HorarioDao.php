@@ -101,7 +101,7 @@ class HorarioDao
             if (mysqli_stmt_affected_rows($stmt) > 0) {
                 
                $stat[0] = true;
-				$stat[1] = "Success save especialidad";
+				$stat[1] = "Success";
 				return $stat;
             } else {
                 $stat[0] = false;

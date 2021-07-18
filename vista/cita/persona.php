@@ -133,23 +133,27 @@
 			<input type="hidden" id="crud">
 									
                     <label for="exampleInputEmail1">Documento</label>
-                 <input type="number" class="form-control" id="documento" maxlength="11"  required placeholder="N° Documento">
+				<!--
+                 <input type="number" class="form-control" id="documentoss" maxlength="11"  required placeholder="N° Documento">
+				 -->
+				 <input type="number" class="form-control" id="documento" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==11) return false;" required placeholder="N° Documento"/>
+				 
             </div>
 			
 			
 			<div class="form-group">
                     <label for="exampleInputEmail1">Apellido Paterno</label>
-                  <input type="text" class="form-control" id="paterno" required placeholder="Ap. Paterno">
+                  <input type="text" class="form-control" id="paterno" maxlength="50" required placeholder="Ap. Paterno">
             </div>
 			
 			<div class="form-group">
                     <label for="exampleInputEmail1">Apellido Materno</label>
-                  <input type="text" class="form-control" id="materno" required placeholder="Ap. Materno">
+                  <input type="text" class="form-control" id="materno" maxlength="50" required placeholder="Ap. Materno">
             </div>
 			
 			<div class="form-group">
                     <label for="exampleInputEmail1">Nombres</label>
-                  <input type="text" class="form-control" id="nombres" required placeholder="Nombres">
+                  <input type="text" class="form-control" id="nombres" maxlength="50" required placeholder="Nombres">
             </div>
 						
 			</div>
@@ -158,6 +162,9 @@
 			
 			<div class="form-group">
                     <label for="exampleInputEmail1">Fecha Nacimiento</label>
+					<!--
+					<input type="text" class="form-control" id="fecnac" maxlength="50" required placeholder="">
+					-->
                    <input type="date" class="form-control" id="fechanacimiento" required placeholder="Fecha Nacimiento" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
             </div>
 			
@@ -173,7 +180,7 @@
 			
 			<div class="form-group">
                     <label for="exampleInputEmail1">Correo</label>
-                   <input type="email" class="form-control" autocomplete="off" required id="correo" placeholder="Correo">
+                   <input type="email" class="form-control" autocomplete="off" maxlength="60" required id="correo" placeholder="Correo">
             </div>
 				
 			
@@ -255,7 +262,11 @@
 	
 	
 	
-	
+	function IsEmail(email) {
+						var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+						return regex.test(email);
+					}
+					
 	
 	
 $(document).ready(function(){
@@ -339,6 +350,38 @@ $(document).ready(function(){
 						  var date= $("#fechanacimiento").val();
 							var fecha = date.split("/").reverse().join("-");
 							
+							if(
+								(
+								$("#documento").val().trim() == ''  ||
+								$("#paterno").val().trim() == ''  ||
+								$("#materno").val().trim() == ''  ||
+								$("#nombres").val().trim() == ''  ||
+								$("#fechanacimiento").val().trim() == ''  ||
+								$("#sexo").val().trim() == ''  ||
+								$("#correo").val().trim() == ''
+								)
+							
+							  ){
+						
+								Swal.fire(
+									  'Error!',
+									  'Porfavor, complete los campos.',
+									  'error'
+									)
+								return;
+							}
+							
+							if (IsEmail($("#correo").val())) {
+					   						
+							}else{
+								
+							Swal.fire(
+								  'Error!',
+								  'El correo ingresado no es válido.',
+								  'error'
+								)
+							return;
+							}
 														
 						  add_accion(
 						    $("#documento").val(),
@@ -380,6 +423,38 @@ $(document).ready(function(){
 							 var date= $("#fechanacimiento").val();
 							var fecha = date.split("/").reverse().join("-");
 						  
+						  if(
+								(
+								$("#documento").val().trim() == ''  ||
+								$("#paterno").val().trim() == ''  ||
+								$("#materno").val().trim() == ''  ||
+								$("#fechanacimiento").val().trim() == ''  ||
+								$("#sexo").val().trim() == ''  ||
+								$("#correo").val().trim() == ''
+								)
+							
+							  ){
+						
+								Swal.fire(
+									  'Error!',
+									  'Porfavor, complete los campos.',
+									  'error'
+									)
+								return;
+							}
+							
+							if (IsEmail($("#correo").val())) {
+					   						
+							}else{
+								
+							Swal.fire(
+								  'Error!',
+								  'El correo ingresado no es válido.',
+								  'error'
+								)
+							return;
+							}
+						  
 						  edit_accion(
 						  
 						  $("#txtcode").val(),
@@ -409,7 +484,16 @@ $(document).ready(function(){
 				$("#modal-especialidad").modal("show");
 								
 				$("#txtcode").val("");
-						
+				
+								$("#documento").val("");
+								$("#paterno").val("");
+								$("#materno").val("");
+								$("#nombres").val("");
+								$("#fechanacimiento").val("");
+								
+								$('#sexo').val("1");
+								$("#correo").val().trim("");
+								
 						
 				$("#crud").val("N");
 				
@@ -434,7 +518,14 @@ $(document).ready(function(){
 									$("#paterno").val(data.apePaterno);
 									$("#materno").val(data.apeMaterno);
 									$("#nombres").val(data.nombres);
-									$("#fechanacimiento").val(data.fechaNacimiento);
+									
+									var date = data.fechaNacimiento;
+									date = date.split("/").reverse().join("-");
+
+									//$("#fechanacimiento").val(data.fechaNacimiento);
+									$("#fechanacimiento").val(date);
+									//$("#fecnac").val(date);
+									
 									$("#sexo").val(data.sexo);
 									$("#correo").val(data.correo);
 									
@@ -456,8 +547,11 @@ $(document).ready(function(){
 			}
 			let table = $('#table-lista').DataTable(); 
 			let data = table.row( current_row).data();
+			
+			
 			let idEspecialidad = data.idPersona;
 						
+			console.log(idEspecialidad);
 			
 			Swal.fire({
 					  title: 'Borrar',
@@ -604,7 +698,10 @@ $(document).ready(function(){
 					data: ajax,
 					success: function(data, textStatus, jqXHR)
 					{
+						console.log(data);
+						
 						$resp = JSON.parse(data);
+						
 						if($resp['status'] == true){
 							
 							Swal.fire(
@@ -617,9 +714,9 @@ $(document).ready(function(){
 						}else{
 							
 							Swal.fire(
-						  'Success!',
+						  'Error!',
 						 'No se pudo borrar la persona.',
-						  'success'
+						  'error'
 						)
 						}
 						
@@ -635,5 +732,9 @@ $(document).ready(function(){
 				});
 		}
 
+
+			function validaCampos(){
+				
+			}
 		
 	</script>

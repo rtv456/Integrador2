@@ -178,8 +178,10 @@
                     <label for="exampleInputEmail1">Minutos Atencion</label>
                    <input type="hidden" id="crud">
 									<input type="hidden" id="txtcode">
-									
-									<input type="text" class="form-control" id="txtMinutosAtencion" placeholder="20">
+									<!--
+									<input type="text" class="form-control" id="ssss" placeholder="20">
+									-->
+									 <input type="number" class="form-control" id="txtMinutosAtencion" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;" required placeholder="20"/>
 									
             </div>
 			
@@ -278,7 +280,9 @@
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			  <!--
               <button type="button" class="btn btn-primary" id="btn-save">Guardar</button>
+			  -->
             </div>
           </div>
           <!-- /.modal-content -->
@@ -487,6 +491,26 @@ $('.label-toggle-switch').on('switchChange', function (e, data) {
 					return;
 				}
 				
+				
+				if(
+								(
+								$("#departamentos").val() == ''  ||
+								$("#provincias").val() == ''  ||
+								$("#txtPersonaSeleccionada").val().trim() == ''  ||
+								$("#txtCMP").val().trim() == ''  ||
+								$("#txtMinutosAtencion").val().trim() == ''
+								)
+							
+							  ){
+						
+								Swal.fire(
+									  'Error!',
+									  'Porfavor, complete los campos.',
+									  'error'
+									)
+								return;
+							}
+							
 
 
 				if($("#crud").val() == 'N'){
@@ -566,6 +590,8 @@ $('.label-toggle-switch').on('switchChange', function (e, data) {
 			$("#txtPersonaSeleccionada").val("");
 			$("#txtCMP").val("");
 			$("#txtMinutosAtencion").val("");
+			
+			$("#buscarModalPersona").removeAttr('disabled');
 										
 				$("#crud").val("N");
 				
@@ -596,7 +622,7 @@ $('.label-toggle-switch').on('switchChange', function (e, data) {
 					"url": "../../controlador/PersonaControlador.php",
 					"type": "POST",
 					"data" : {
-						method : "buscar_persona",
+						method : "buscar_persona_medico",
 						nombres:nombreBuscar
 					},
 					error: function (request, textStatus, errorThrown) {
@@ -642,6 +668,9 @@ $('.label-toggle-switch').on('switchChange', function (e, data) {
 			$("#txtPersonaSeleccionada").val(data.medico);
 			$("#txtCMP").val(data.CMP);
 			$("#txtMinutosAtencion").val(data.minutosAtencion);
+			
+			
+			$("#buscarModalPersona").attr('disabled','disabled'); 
 			
 			llenaEspecialidad(data.idSede,data.idEspecialidad);
 			
@@ -733,7 +762,7 @@ $('.label-toggle-switch').on('switchChange', function (e, data) {
 		
 		
 		$("#buscarModalPersona").click(function(){
-			
+			$('#table-lista-persona').dataTable().fnClearTable();
 				$("#modal-persona").modal("show");
 				
 		});
@@ -925,9 +954,9 @@ $('.label-toggle-switch').on('switchChange', function (e, data) {
 						}else{
 							
 							Swal.fire(
-						  'Success!',
+						  'Error!',
 						 'No se pudo borrar el medico.',
-						  'success'
+						  'error'
 						)
 						}
 						

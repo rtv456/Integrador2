@@ -42,10 +42,19 @@
   <link rel="stylesheet" href="../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
   
   
+  
 <style type="text/css">
 .hide_column {
        display : none;
 }
+
+.modal .modal-dialog { 
+        
+        min-width:50%;
+    }
+<!--	
+modal-examen
+-->
 </style>
   
   
@@ -96,7 +105,7 @@
 	<!-- SELECT2 EXAMPLE -->
         <div class="card card-default">
           <div class="card-header">
-            <h3 class="card-title">Agendar Cita</h3>
+            <h3 class="card-title">Cargar Exámenes</h3>
 
           </div>
           <!-- /.card-header -->
@@ -104,20 +113,9 @@
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>Sede</label>
-				  
-                  <select class="form-control select2bs4" name="departamentos" id="departamentos" style="width: 100%;">
-                    <option selected="selected">-Seleccione-</option>
-                    <?php 
-					 $objsedecontrolador = new SedeControlador();
-					 $lista = $objsedecontrolador->ListarSedes();
-						foreach ($lista as $val) {
-						?>
-							<option value="<?php echo $val['idSede'] ?>"><?php echo $val['descripcion'] ?></option>
-						<?php
-							}
-					?>
-		          </select>
+                  <label>Paciente</label>
+				  <input type="hidden" id="htxtUsuario" value="<?php echo $_SESSION["s_usuario"]; ?>">
+                <input type="text" class="form-control" id="b_paciente" placeholder="">
 				  
 				 				  
                 </div>
@@ -125,10 +123,9 @@
               </div>
 			   <div class="col-md-3">
                 <div class="form-group">
-                  <label>Especialidad</label>
+                  <label>Documento</label>
                  
-				  <select class="form-control select2bs4" name="provincias" id="provincias" style="width: 100%;">
-				  </select>
+				 <input type="text" class="form-control" id="b_documento" placeholder="">
 				  
                 </div>
 
@@ -136,8 +133,8 @@
 			  
 			  	<div class="col-md-3">
                 <div class="form-group">
-				  <label>Médicos</label>
-				  <select class="form-control select2bs4" name="distritos" id="distritos" style="width: 100%;"></select>
+				  <label>Código Cita</label>
+				  <input type="text" class="form-control" id="b_cita" placeholder="">
 				
                 </div>
 
@@ -152,7 +149,7 @@
 				  
 				  <input type="text" class="form-control datetimepicker-input" id="fecha" name="fecha" autocomplete="off" data-toggle="datetimepicker" data-target="#fecha" />
 				  <span class="input-group-btn">
-					<button class="btn btn-default" id="btnBuscar" type="button">Buscar cita</button>
+					<button class="btn btn-default" id="btnBuscar" type="button">Buscar Examen</button>
 				  </span>
 				</div>
 				
@@ -185,7 +182,7 @@
 <!-- TABLE: LATEST ORDERS -->
             <div class="card">
               <div class="card-header border-transparent">
-                <h3 class="card-title">Horarios disponibles</h3>
+                <h3 class="card-title">Exámenes</h3>
               </div>
 			  
               <!-- /.card-header -->
@@ -206,14 +203,17 @@
                       <thead>
                         <tr>
 						
-						<th class="hide_column">idHhorario</th>
-						<th class="hide_column">idMedico</th>
-						
-                          <th>Sede</th>
-                          <th>Especialidad</th>
-                          <th>Médico</th>
-						  <th>Fecha</th>
-						  <th>Hora</th>
+                          <th>idExamenes</th>
+                          <th>Examen</th>
+                          <th>Cita</th>
+						  <th>Documento</th>
+						  <th>Paciente</th>
+						  <th>Médico</th>
+						  <th>Fecha Ate.</th>
+						  <th>Estado</th>
+						  <th class="hide_column">Estado</th>
+						  <th class="hide_column">idH</th>
+						  <th class="hide_column">ar</th>
 						  <th></th>
 
                         </tr>
@@ -245,7 +245,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Confirmar Cita</h4>
+              <h4 class="modal-title">Archivo</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -254,63 +254,45 @@
 			  
 				  
 		    <div class="form-group">
-                    <label for="exampleInputEmail1">Sede</label>
+                    <label for="exampleInputEmail1">Examen</label>
                    <input type="hidden" id="crud">
-									<input type="hidden" id="txtcode">
-									<input type="hidden" id="hidHorario">
-									<input type="text" class="form-control" id="txtSede" placeholder="Nombre de la especialidad">
-            </div>
-			
-			<div class="form-group">
-                    <label for="exampleInputEmail1">Especialidad</label>
-                   <input type="hidden" id="crud">
-									<input type="hidden" id="hidEspecialidad">
-									<input type="text" class="form-control" id="txtEspecialidad" placeholder="Nombre de la especialidad">
-            </div>
-			<div class="form-group">
-                    <label for="exampleInputEmail1">Médico</label>
-                   <input type="hidden" id="crud">
-									<input type="hidden" id="hidMedico">
-									<input type="text" class="form-control" id="txtMedico" placeholder="Nombre de la especialidad">
-            </div>
-			
-			<div class="form-group">
-                    <label for="exampleInputEmail1">Paciente</label>
-                   <input type="hidden" id="crud">
-				
-									<input type="hidden" id="hidPaciente" value="<?php echo $_SESSION["s_idPaciente"]; ?>">
 									
-									<input type="hidden" id="htxtUsuario" value="<?php echo $_SESSION["s_usuario"]; ?>">
-									<input type="text" class="form-control" id="txtPaciente" value="<?php echo $_SESSION["s_nombre"]; ?>" placeholder="Nombre de la especialidad">
-            </div>
-			
-			<div class="form-group">
-                    <label for="exampleInputEmail1">Fecha / Hora</label>
-                   <input type="hidden" id="crud">
-									<input type="hidden" id="hfechaHora">
-									<input type="text" class="form-control" id="txtFechaHora" placeholder="Nombre de la especialidad">
+									<input type="hidden" id="d_idExamenes">
+									<input type="hidden" id="d_idHistoria">
+									<input type="text" class="form-control" id="c_examen" placeholder="">
             </div>
 			
 			
-				
+			  <div class="form-group">
+                    <label for="exampleInputFile">Archivo</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="c_archivo">
+                        <label class="custom-file-label" for="exampleInputFile">Seleccionar Archivo</label>
+                      </div>
+                     
+                    </div>
+                  </div>
+				  
+						
 			
-			<!--				
-				 <div class="form-group">
+						
+				<div class="form-group">
                     <label for="exampleInputEmail1">Estado</label>
                    <select class="form-control" id="cboestado">
-										<option value="1">Activo</option>
-										<option value="2">Inactivo</option>
+										<option value="1">Solicitado</option>
+										<option value="2">Cargado</option>
 										<option value="0">Anulado</option>
 									</select>
             </div>
-			-->
+			
 				 
 					
 			  
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-              <button type="button" class="btn btn-primary" id="btn-save">Generar Cita</button>
+              <button type="button" class="btn btn-primary" id="btn-save">Cargar Archivo</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -320,6 +302,101 @@
       <!-- /.modal -->
 	  
 	  
+	  
+	  
+	  
+	  <div class="modal fade" id="modal-examen" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Examén</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+			  
+			 
+				
+            </div>
+            <div class="modal-body">
+			
+			<!--
+			<div class="form-group">
+                    <label for="exampleInputEmail1">Archivo</label>
+                   <input type="hidden" id="crud">
+									
+									<input type="hidden" id="ruta">
+									
+									<input type="text" class="form-control" id="txtarchivo" placeholder="">
+            </div>
+			-->
+			
+				<div class="row">
+				
+				
+				<div class="col-md-12 col-sm-12 ">
+                <div class="x_panel">
+				
+				
+                  <div class="x_content">
+                      <div class="row">
+                          <div class="col-sm-12">
+                            <div class="card-box table-responsive">
+							
+							<embed id="visor"src="asdas.pdf" frameborder="0" width="100%" height="400px" class="embed-responsive embed-responsive-4by3">
+							
+							
+							<!--
+							<embed src="1.pdf"
+                               frameborder="0" width="100%" height="400px">
+
+							<iframe src="1.pdf"></iframe>
+							asdsa
+							
+							<iframe src="../../controlador/upload/1.pdf" frameborder="0" width="100%" height="100px">
+
+							</iframe>
+							-->
+							
+							<!--
+							<embed src="../../controlador/upload/1.pdf" frameborder="0" width="100%" height="400px">
+							
+							
+							<iframe src="C:\xampp\htdocs\cita\controlador\1.pdf" width="600" height="780" style="position: absolute;top: 66px;bottom: 0px;right: 0px;width: 100%;border: none;margin: 0;padding: 0;overflow: hidden;z-index: 3;height: 100%;"></iframe>
+							-->
+
+
+					
+					
+					
+                  </div>
+                </div>
+              </div>
+            </div>
+                </div>
+              </div>
+			  
+				  
+				  </div>
+		    
+								
+			  
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              <!--
+			  <button type="button" class="btn btn-primary" id="btn-save">Guardar</button>
+			  -->
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+	  
+	  
+		
+		
 	
 	  </section>
     <!-- /.content -->
@@ -366,62 +443,7 @@
 		          });
 		    });
 		
-			
-	/*		
-$(function () {
-    $('#reservationdate').datetimepicker({
-       format: 'L'
-    });
-  })
-  */
-  
-	
-	
-	
-	$("#departamentos").change(function(){
-		
-		$("#distritos").find('option').remove();
-		
-	 		var parametros= "id="+$("#departamentos").val();
-			
-			console.log(parametros);
-			
-	 		$.ajax({
-                data:  parametros,
-                url:   '../../controlador/EspecialidadControlador.php',
-                type:  'post',
-                beforeSend: function () { },
-                success:  function (response) {                	
-                    $("#provincias").html(response);
-					
-					console.log(response);
-                },
-                error:function(){
-                	alert("error")
-                }
-            });
-	})
-
-			$("#provincias").change(function(){
-	 		var parametros= "idEspecialidad="+$("#provincias").val();
-			
-			console.log(parametros);
-			
-			
-	 		$.ajax({
-                data:  parametros,
-                url:   '../../controlador/EspecialidadControlador.php',
-                type:  'post',
-                beforeSend: function () { },
-                success:  function (response) {                	
-                    $("#distritos").html(response);
-					console.log(response);
-                },
-                error:function(){
-                	alert("error")
-                }
-            });
-		})       
+			       
 
 </script>
 
@@ -448,8 +470,8 @@ $(document).ready(function(){
 			$("#btnBuscar").click(function(){
 				
 				
-				
-				/*if($("#fecha").val() == ''){
+				/*
+				if($("#fecha").val() == ''){
 			
 					Swal.fire(
 						  'Error!',
@@ -458,30 +480,34 @@ $(document).ready(function(){
 						)
 					return;
 				}*/
+				
+				
 				if(
 								(
-								$("#departamentos").val() == ''  ||
-								$("#provincias").val() == ''  ||
-								$("#distritos").val() == ''  ||
+								$("#b_paciente").val().trim() == ''  &&
+								$("#b_documento").val().trim() == ''  &&
+								$("#b_cita").val().trim() == ''  &&
 								$("#fecha").val().trim() == ''
 								)
 							  ){
 								Swal.fire(
 									  'Error!',
-									  'Porfavor, ingrese los parametros de búsqueda.',
+									  'Porfavor, al menos ingrese un parametro de búsqueda.',
 									  'error'
 									)
 								return;
 							}
-							
 				
 				
 				 var date= $("#fecha").val();
-				 var fecha = date.split("/").reverse().join("-");
+				 //var fecha = date.split("/").reverse().join("-");
 				 
-				 var idMedico=$("#distritos").val();
+						var paciente = $("#b_paciente").val();
+						var documento = $("#b_documento").val();
+						var cita = $("#b_cita").val();
+						var fecha = $("#fecha").val();
 				
-				console.log(fecha+idMedico);
+				//console.log(fecha+idMedico);
 				
 				$('#table-especialidad').DataTable({
 					
@@ -495,12 +521,14 @@ $(document).ready(function(){
 					},
 				
 				"ajax": {
-					"url": "../../controlador/CitasControlador.php",
+					"url": "../../controlador/ExamenesHistoriaClinicaControlador.php",
 					"type": "POST",
 					"data" : {
-						method : "list_horario",
-						fecha:fecha,
-						idMedico:idMedico
+						method : "lista_examenes",
+						paciente: paciente,
+						documento: documento,
+						cita:cita,
+						fecha:fecha
 						
 					},
 					error: function (request, textStatus, errorThrown) {
@@ -512,28 +540,37 @@ $(document).ready(function(){
 				
 				"columnDefs": [
 						{
-							"targets": [ 0 ],
+							"targets": [ 8 ],
 							"visible": false,
 							"searchable": false
 						},
 						{
-							"targets": [ 1 ],
+							"targets": [ 9 ],
+							"visible": false,
+							"searchable": false
+						},
+						{
+							"targets": [ 10 ],
 							"visible": false,
 							"searchable": false
 						}
 					],
 				
 				columns: [
-					{ "data": "idHorario" },
-					{ "data": "idMedico" },
-					{ "data": "descSede" },
-					{ "data": "descEspecialidad" },
+					{ "data": "idExamenes" },
+					{ "data": "examen" },
+					{ "data": "idCita" },
+					{ "data": "documento" },
+					{ "data": "paciente" },
 					{ "data": "medico" },
-					{ "data": "fechaHoraInicio" },
-					{ "data": "fechaHora" },
+					{ "data": "fechaAtencion" },
+					{ "data": "txtestado" },
+					{ "data": "estado" },
+					{ "data": "idHistoria" },
+					{ "data": "archivo" },
 					{ "data": null, render : function(data,type,row){
 						//console.log(data);
-						return "<button title='Edit' class='btn btn-edit btn-warning btn-sm'><i class='fa fa-pencil'></i> Selecionar</button>";
+						return "<button title='Edit' class='btn btn-edit btn-warning btn-sm'><i class='fa fa-pencil'></i> Cargar Examen</button> <button title='Edit' class='btn btn-abrirExamen btn-success btn-sm'><i class='fa fa-pencil'></i> Resultado</button>";
 					} 		
 					},
 				]
@@ -546,10 +583,10 @@ $(document).ready(function(){
 
 			$("#btn-save").click(function(){
 				if($("#txtSede").val() == ''){
-					//swal("Please enter name");
+					
 					Swal.fire(
 						  'Error!',
-						  'Porfavor ingrese descripción.',
+						  'Porfavor seleccione archivo.',
 						  'error'
 						)
 					return;
@@ -561,7 +598,7 @@ $(document).ready(function(){
 					
 					Swal.fire({
 					  title: 'Nuevo',
-					  text: "Crear nuevo Cita ?",
+					  text: "Crear nuevo archivo ?",
 					  icon: 'warning',
 					  showCancelButton: true,
 					  confirmButtonColor: '#3085d6',
@@ -585,38 +622,36 @@ $(document).ready(function(){
 					
 					Swal.fire({
 					  title: 'Guardar',
-					  text: "Desea agendar su cita ?",
+					  text: "Desea cargar el archivo?",
 					  icon: 'warning',
 					  showCancelButton: true,
 					  confirmButtonColor: '#3085d6',
 					  cancelButtonColor: '#d33',
-					  confirmButtonText: 'Si, Quiero agendar!'
+					  confirmButtonText: 'Si, Quiero cargar!'
 					}).then(result => {
 						if (result.value) {
-						  						  
-						  if($("#hidPaciente").val() == ''){
+						  		
+							var archivo ="hola file archivo";
+								
+							if($("#c_archivo").val() == ''){
 					
 							Swal.fire(
 								  'Error!',
-								  'Perfil no admitido para obtener cita.',
+								  'Seleccione archivo.',
 								  'error'
 								)
 							return;
-						}
+							}
 						
 						
 						
-var cuerpo="Hola:"+$('#txtPaciente').val()+"<br><br> Su cita fue programada con éxito, de acuerdo al siguiente detalle:<br> <br> <table border='1' class=''><tr><td>Sede</td><td>"+$('#txtSede').val()+"</td></tr><tr><td>Especialidad</td><td>"+$('#txtEspecialidad').val()+"</td></tr><tr><td>Médico</td><td>"+$('#txtMedico').val()+"</td></tr><tr><td>Fecha/Hora</td><td>"+$('#txtFechaHora').val()+"</td></tr></table><br> Atentamente, <br><br><br><b>CLINICA LOS OLIVOS</b>";
-
-				
-						  generar_cita($("#hidHorario").val(),$("#hidMedico").val(),$("#hidPaciente").val(),$("#txtFechaHora").val(),$("#htxtUsuario").val(),
-						  
-						  cuerpo,
-						  $("#htxtUsuario").val()
-											  
-						  );
-						  
-						  
+						generar_cita(
+							$("#d_idExamenes").val(),
+							$("#d_idHistoria").val(),
+							archivo,
+							$("#htxtUsuario").val(),
+							$("#cboestado").val()
+							);
 										  
 						} else {
 						}
@@ -624,6 +659,7 @@ var cuerpo="Hola:"+$('#txtPaciente').val()+"<br><br> Su cita fue programada con 
 					);
 				}
 			});
+			
 
 			$("#btn-add").click(function(){
 				$("#modal-especialidad").modal("show");
@@ -633,13 +669,49 @@ var cuerpo="Hola:"+$('#txtPaciente').val()+"<br><br> Su cita fue programada con 
 			});
 		});
 
+		
+		
+		$(document).on("click",".btn-abrirExamen",function(){
+			
+			var current_row = $(this).parents('tr'); 
+			if (current_row.hasClass('child')) { 
+				current_row = current_row.prev(); 
+			}
+			var table = $('#table-especialidad').DataTable(); 
+			var data = table.row( current_row).data();
+			
+			//var mivisor = document.getElementById("visor").src;
+			
+			//mivisor.src = "../../controlador/upload/1.pdf";
+			
+			document.getElementById("visor").src = "../../controlador/upload/"+data.archivo;
+			
+			//src="../../controlador/upload/1.pdf"
+			console.log(data);
+				
+				//$("#txtarchivo").val(data.archivo);
+				
+									
+			/*$("#d_idExamenes").val(data.idExamenes);
+			$("#d_idHistoria").val(data.idHistoria);
+			$("#c_examen").val(data.idExamenes);
+			$("#cboestado").val(data.estado);*/
+					
+			$("#modal-examen").modal("show");
+			/*setTimeout(function(){ 
+				$("#txtdescripcion").focus()
+			}, 1000*/
 
+			//$("#crud").val("E");
+
+		});
+		
 
 		$(document).on("click",".btn-edit",function(){
 			
 			
-			var paciente= $("#htxtPaciente").val();
-			console.log(paciente);
+			/*var paciente= $("#htxtPaciente").val();
+			console.log(paciente);*/
 			
 			var current_row = $(this).parents('tr'); 
 			if (current_row.hasClass('child')) { 
@@ -650,7 +722,14 @@ var cuerpo="Hola:"+$('#txtPaciente').val()+"<br><br> Su cita fue programada con 
 			
 			console.log(data);
 			
-			$("#hidHorario").val(data.idHorario);
+									
+									
+			$("#d_idExamenes").val(data.idExamenes);
+			$("#d_idHistoria").val(data.idHistoria);
+			$("#c_examen").val(data.idExamenes);
+			$("#cboestado").val(data.estado);
+			
+			/*$("#hidHorario").val(data.idHorario);
 		
 		
 			$("#hidMedico").val(data.idMedico);
@@ -661,14 +740,7 @@ var cuerpo="Hola:"+$('#txtPaciente').val()+"<br><br> Su cita fue programada con 
 			$("#txtMedico").val(data.medico);
 		
 			$("#txtFechaHora").val(data.fechaHoraInicio);
-			
-			
-			$("#txtSede").attr('disabled','disabled'); 
-			$("#txtEspecialidad").attr('disabled','disabled'); 
-			$("#txtMedico").attr('disabled','disabled'); 
-			$("#txtPaciente").attr('disabled','disabled'); 
-			$("#txtFechaHora").attr('disabled','disabled'); 
-			
+			*/
 			
 			$("#modal-especialidad").modal("show");
 			setTimeout(function(){ 
@@ -703,39 +775,117 @@ var cuerpo="Hola:"+$('#txtPaciente').val()+"<br><br> Su cita fue programada con 
 
 
 		
-		function generar_cita(ih,im,ip,fe,us,cuer,cor){
+		function generar_cita(par1,par2,par3,par4,par5){
 			
-			showLoadingScreen();
-			$("#modal-especialidad").modal("hide");
+				//var formData = new FormData($("#YOUR_FORM_ID")[0]);
+			
+				var file_data = $('#c_archivo').prop('files')[0];   
+				var form_data = new FormData();                  
+				form_data.append('file', file_data);
+				form_data.append("idExamenes", par1);
+				form_data.append("idHistoria", par2);
+				form_data.append("usuarioRegistra", par4);
+				form_data.append("estado", par5);
+							
+				//alert(form_data);
+				console.log(form_data);	
+								
+				$.ajax({
+					url: '../../controlador/cargaControlador.php', // <-- point to server-side PHP script 
+					dataType: 'text',  // <-- what to expect back from the PHP script, if anything
+					cache: false,
+					contentType: false,
+					processData: false,
+					data: form_data,                         
+					type: 'post',
+					success: function(php_script_response){
+					
+					$("#modal-especialidad").modal("hide");
+											
+						let xtable = $('#table-especialidad').DataTable(); 
+						xtable.ajax.reload( null, false );
+						
+						
+					  Swal.fire({
+					  title: 'Correcto',
+					  text: "Examen guardado correctamente.",
+					  icon: 'success',
+					  showCancelButton: false,
+					  confirmButtonColor: '#3085d6',
+					  cancelButtonColor: '#d33',
+					  confirmButtonText: 'Aceptar'
+						}).then(result => {
+							if (result.value) {
+							 											  
+							} else {
+								
+							}
+						  }
+						);
+						
+					}
+					,
+					error: function (request, textStatus, errorThrown) {
+						
+						Swal.fire(
+							  'Error!',
+							  'Ha ocurrido algún error.',
+							  'error'
+							)
+
+					}
+				 });
+			
+			
+	
+			
+			/*$("#modal-especialidad").modal("hide");
 			
 				console.log("dentro");
-						  console.log(ih);
-						  console.log(im);
-						  console.log(ip);
-						  console.log("aqui fecha:");
-						  console.log(fe);
-						  console.log(us);
+						  console.log(par1);
+						  console.log(par2);
+						  console.log(par3);
+						  console.log(par4);
+						  console.log(par5);
+						  
+						  console.log("Inicia Carga...");
+						 //var image =  $("#c_archivo").val();
+					
+						 
+						 //var file_data = $(this).prop('c_archivo')[0];   
+						 //var form_data = new FormData();
+						 
+						 //form_data.append('file', file_data); 
+						 
+						 //console.log(form_data);
+						 //console.log(image);
+						 
+						 
+						var file_data = $('#c_archivo').prop('files')[0];   
+						var form_data = new FormData();                  
+						form_data.append('file', file_data);
+						console.log(form_data);	
+						
+						  console.log("Fin Carga...");
 						  
 						  
 			let ajax = {
-				method: "agendar_cita",
-				idHorario : ih,
-				idMedico : im,
-				idPaciente:ip,
-				fechaHoraCita:fe,
-				usuarioReg:us,
-				cuerpo: cuer,
-				correo: cor
+				idExamenes:par1,
+				idHistoria:par2,
+				archivo:par3,
+				usuarioRegistra:par4,
+				estado:par5
 
 			}
+			
+			console.log(ajax);
+			
 			$.ajax({
-				url:  "../../controlador/CitasControlador.php",
+				url:  "../../controlador/cargaControlador.php",
 				type: "POST",
 				data: ajax,
 				success: function(data, textStatus, jqXHR)
 				{
-					
-					$.unblockUI();
 					
 					$resp = JSON.parse(data);
 					
@@ -743,16 +893,12 @@ var cuerpo="Hola:"+$('#txtPaciente').val()+"<br><br> Su cita fue programada con 
 
 					if($resp['status'] == true){
 						$("#modal-especialidad").modal("hide");
-						
-						
-						
+											
 						let xtable = $('#table-especialidad').DataTable(); 
 						xtable.ajax.reload( null, false );
 						
 						
-						
-						
-						 Swal.fire({
+					  Swal.fire({
 					  title: 'Correcto',
 					  text: "Cita guardado correctamente.",
 					  icon: 'success',
@@ -762,9 +908,7 @@ var cuerpo="Hola:"+$('#txtPaciente').val()+"<br><br> Su cita fue programada con 
 					  confirmButtonText: 'Aceptar'
 						}).then(result => {
 							if (result.value) {
-							 
-							  window.location.href = "miscitas.php";
-											  
+							 											  
 							} else {
 								
 							}
@@ -775,16 +919,13 @@ var cuerpo="Hola:"+$('#txtPaciente').val()+"<br><br> Su cita fue programada con 
 					}else{
 						
 						Swal.fire(
-						  'Error!',
-						  $resp['message'],
-						  'error'
+						  'Advertencia!',
+						  'No se pudo guardar la cita, porque no hubo cambios.',
+						  'warning'
 						)
 					}
 				},
 				error: function (request, textStatus, errorThrown) {
-					
-					$.unblockUI();
-					
 					
 					Swal.fire(
 						  'Error!',
@@ -793,13 +934,12 @@ var cuerpo="Hola:"+$('#txtPaciente').val()+"<br><br> Su cita fue programada con 
 						)
 
 				}
-			});
+			});*/
+			
+			
 		}
 
 
 		
 	</script>
 	
-
-
-		

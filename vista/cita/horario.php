@@ -457,7 +457,8 @@ $('.label-toggle-switch').on('switchChange', function (e, data) {
 			
 
 			$("#btn-save").click(function(){
-				if($("#txtdescripcion").val() == ''){
+				
+				/*if($("#txtdescripcion").val() == ''){
 			
 					Swal.fire(
 						  'Error!',
@@ -465,7 +466,45 @@ $('.label-toggle-switch').on('switchChange', function (e, data) {
 						  'error'
 						)
 					return;
-				}
+				}*/
+				
+								if(
+								(
+								$("#departamentos").val() == ''  ||
+								$("#provincias").val() == ''  ||
+								$("#distritos").val() == ''  ||
+								$("#fecha").val().trim() == '' ||
+								$("#fecha2").val().trim() == ''
+								)
+							  ){
+								Swal.fire(
+									  'Error!',
+									  'Porfavor, complete los campos.',
+									  'error'
+									)
+								return;
+							}
+				
+				
+								if(
+								(
+								$('#cbxLunes').prop('checked')==false  &
+								$('#cbxMartes').prop('checked')==false  &
+								$('#cbxMiercoles').prop('checked')==false  &
+								$('#cbxJueves').prop('checked')==false  &
+								$('#cbxViernes').prop('checked')==false  &
+								$('#cbxSabado').prop('checked')==false  &
+								$('#cbxDomingo').prop('checked')==false 
+								)
+							  ){
+								Swal.fire(
+									  'Error!',
+									  'Porfavor, seleccione al menos un dia de la semana.',
+									  'error'
+									)
+								return;
+							}
+				
 				
 
 

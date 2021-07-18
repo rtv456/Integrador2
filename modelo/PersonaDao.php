@@ -6,6 +6,208 @@ include_once dirname( __DIR__ ) . '../entidad/UsuariosBean.php';
 class PersonaDao
 {
 	
+	public function BuscarPersonaUsuario($nombres)
+	{
+
+		try {
+		
+	
+		 $cn = new ConexionBD();
+         $cnx = $cn->getConexionCursor();
+				
+				
+		if ($cnx->multi_query("
+				SELECT 
+					PE.idPersona,
+					CONCAT(PE.apePaterno,' ',PE.ApeMaterno,' ',PE.nombres)nombres,
+					''message,
+					''status					
+				FROM persona PE
+				WHERE PE.estado<>0
+				
+                AND CONCAT(PE.apePaterno,' ',PE.ApeMaterno,' ',PE.nombres) LIKE '%$nombres%'")) 
+			{
+			
+			$Lista = array();
+			
+			if ($result = $cnx->store_result()) {
+			 
+			 
+			 while ($row = $result->fetch_assoc()) {
+				 
+			 		 $Lista[] = array(
+
+                        'idPersona' => $row['idPersona'],
+                        'nombres' => $row['nombres'],
+						'message' => $row['message'],
+						'status' => $row['status']
+						
+						
+                    );	 
+			 }
+			 
+				$stat[0] = true;
+				$stat[1] = "Lista";
+				$stat[2] = $Lista;
+				
+			$result->close();
+		 }else
+		 {
+				$stat[0] = false;
+				$stat[1] = "No hay usuario";
+				$stat[2] = [];
+		 }
+		 		
+							
+		}
+	
+        } catch (Exception $exc) {
+			
+			$stat[0] = false;
+			$stat[1] = $exc->getTraceAsString();
+			$stat[2] = [];
+			return $stat;
+        }
+		
+        return $stat;
+		
+	}
+	
+	public function BuscarPersonaPaciente($nombres)
+	{
+
+		try {
+		
+	
+		 $cn = new ConexionBD();
+         $cnx = $cn->getConexionCursor();
+				
+				
+		if ($cnx->multi_query("
+				SELECT 
+					PE.idPersona,
+					CONCAT(PE.apePaterno,' ',PE.ApeMaterno,' ',PE.nombres)nombres,
+					''message,
+					''status					
+				FROM persona PE
+				WHERE PE.estado<>0
+				AND NOT EXISTS(SELECT 1 FROM paciente UU WHERE UU.idPersona=PE.idPersona AND UU.estado<>0)
+                AND CONCAT(PE.apePaterno,' ',PE.ApeMaterno,' ',PE.nombres) LIKE '%$nombres%'")) 
+			{
+			
+			$Lista = array();
+			
+			if ($result = $cnx->store_result()) {
+			 
+			 
+			 while ($row = $result->fetch_assoc()) {
+				 
+			 		 $Lista[] = array(
+
+                        'idPersona' => $row['idPersona'],
+                        'nombres' => $row['nombres'],
+						'message' => $row['message'],
+						'status' => $row['status']
+						
+						
+                    );	 
+			 }
+			 
+				$stat[0] = true;
+				$stat[1] = "Lista";
+				$stat[2] = $Lista;
+				
+			$result->close();
+		 }else
+		 {
+				$stat[0] = false;
+				$stat[1] = "No hay usuario";
+				$stat[2] = [];
+		 }
+		 		
+							
+		}
+	
+        } catch (Exception $exc) {
+			
+			$stat[0] = false;
+			$stat[1] = $exc->getTraceAsString();
+			$stat[2] = [];
+			return $stat;
+        }
+		
+        return $stat;
+		
+	}
+	
+	
+	public function BuscarPersonaMedico($nombres)
+	{
+
+		try {
+		
+	
+		 $cn = new ConexionBD();
+         $cnx = $cn->getConexionCursor();
+				
+				
+		if ($cnx->multi_query("
+				SELECT 
+					PE.idPersona,
+					CONCAT(PE.apePaterno,' ',PE.ApeMaterno,' ',PE.nombres)nombres,
+					''message,
+					''status					
+				FROM persona PE
+				WHERE PE.estado<>0
+				AND NOT EXISTS(SELECT 1 FROM medico UU WHERE UU.idPersona=PE.idPersona AND UU.estado<>0)
+                AND CONCAT(PE.apePaterno,' ',PE.ApeMaterno,' ',PE.nombres) LIKE '%$nombres%'")) 
+			{
+			
+			$Lista = array();
+			
+			if ($result = $cnx->store_result()) {
+			 
+			 
+			 while ($row = $result->fetch_assoc()) {
+				 
+			 		 $Lista[] = array(
+
+                        'idPersona' => $row['idPersona'],
+                        'nombres' => $row['nombres'],
+						'message' => $row['message'],
+						'status' => $row['status']
+						
+						
+                    );	 
+			 }
+			 
+				$stat[0] = true;
+				$stat[1] = "Lista";
+				$stat[2] = $Lista;
+				
+			$result->close();
+		 }else
+		 {
+				$stat[0] = false;
+				$stat[1] = "No hay usuario";
+				$stat[2] = [];
+		 }
+		 		
+							
+		}
+	
+        } catch (Exception $exc) {
+			
+			$stat[0] = false;
+			$stat[1] = $exc->getTraceAsString();
+			$stat[2] = [];
+			return $stat;
+        }
+		
+        return $stat;
+		
+	}
+	
 	
 	public function BuscarPersona($nombres)
 	{
@@ -86,7 +288,7 @@ class PersonaDao
 					PE.apePaterno,
 					PE.apeMaterno,
 					PE.nombres,
-					PE.fechaNacimiento,
+					DATE_FORMAT(PE.fechaNacimiento,'%d/%m/%Y')fechaNacimiento,
 					PE.sexo,
 					PE.correo,
 					PE.estado,

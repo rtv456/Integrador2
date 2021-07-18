@@ -49,7 +49,37 @@ if( isset( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && ( $_SERVER['HTTP_X_REQUESTED_W
 	
 	if($method == 'nuevo'){
 				
-		
+				$objdaovalida = new UsuarioDAO();
+				
+				$v_idPerfil = $_POST['idPerfil'];
+				$v_idPersona = $_POST['idPersona'];
+								
+			
+				$lista = $objdaovalida->ValidarPefilUsuario($v_idPerfil, $v_idPersona);
+				
+				$retval['data'] = $lista[2];
+				
+				$data = $lista[2];
+				
+					$cantidad ="";
+				
+					foreach ($data as $val) {
+						
+							$cantidad = $val['cantidad'];
+					}
+					
+					
+					if ($cantidad > 0)
+					{
+						$retval['status'] = false;
+						$retval['message'] = "La persona ya cuenta con el perfil seleccionado";
+						$retval['data'] = [0];
+				
+					}else
+					{
+				
+				
+			////
 			$idPersona = $_POST['idPersona'];
 			$idPerfil = $_POST['idPerfil'];
 			$usuario = $_POST['usuario'];
@@ -67,8 +97,11 @@ if( isset( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && ( $_SERVER['HTTP_X_REQUESTED_W
 			$new = $objdao->RegistrarUsuario($objbean);
 			$retval['status'] = $new[0];
 			$retval['message'] = $new[1];
-			echo json_encode($retval);
+			
+			////
 		
+					}
+					echo json_encode($retval);
 		
 	}
 	

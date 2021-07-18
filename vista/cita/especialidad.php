@@ -236,7 +236,7 @@ $(document).ready(function(){
 			
 
 			$("#btn-save").click(function(){
-				if($("#txtdescripcion").val() == ''){
+				if($("#txtdescripcion").val().trim() == ''){
 				
 					Swal.fire(
 						  'Error!',
@@ -484,9 +484,9 @@ $(document).ready(function(){
 						}else{
 						
 							Swal.fire(
-						  'Success!',
+						  'Error!',
 						 'No se pudo borrar la especialidad.',
-						  'success'
+						  'error'
 						)
 						}
 						

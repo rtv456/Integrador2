@@ -7,6 +7,49 @@ include_once dirname( __DIR__ ) . '../entidad/UsuariosBean.php';
 class UsuarioDao
 {
 	
+	
+	
+	public function ValidarPefilUsuario($v_idPerfil, $v_idPersona)
+	{
+		
+		try {
+			
+			
+								/*print_r($v_idPerfil);
+								print_r($v_idPersona);*/
+			
+            $cn = new ConexionBD();
+            $cnx = $cn->getConexionBD();
+            $sql = "SELECT
+					COUNT(*)cantidad
+			FROM usuarios U
+			WHERE U.estado<>0 
+            AND U.idPerfil='$v_idPerfil'
+			AND U.idPersona='$v_idPersona';";
+            $result = mysqli_query($cnx, $sql);
+            $Lista = array();
+            while ($fila = mysqli_fetch_assoc($result)) {
+                $Lista[] = array(
+                    'cantidad' => $fila['cantidad']
+                );
+            }
+						
+			$stat[0] = true;
+			$stat[1] = "Lista";
+			$stat[2] = $Lista;
+			
+			
+        } catch (Exception $exc) {
+           
+			$stat[0] = false;
+			$stat[1] = $ex->getTraceAsString();
+			$stat[2] = ['error'];
+			return $stat;
+        }
+        return $stat;
+		
+	}
+	
 
 public function ListarPerfil()
     {

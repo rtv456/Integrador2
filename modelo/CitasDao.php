@@ -6,6 +6,50 @@ include_once dirname( __DIR__ ) . '../entidad/CitasBean.php';
 class CitasDao
 {
 	
+	
+	public function ValidarCantidadCita(CitasBean $obj)
+	//public function ValidarCantidadCita($idPaciente,$fecha)
+	{
+		
+		try {
+			
+			$idPaciente=$obj->idPaciente;
+			$fecha=$obj->fechaHoraCita;
+			
+			
+            $cn = new ConexionBD();
+            $cnx = $cn->getConexionBD();
+            $sql = "SELECT
+					COUNT(*)cantidad
+			FROM citas C
+			WHERE C.estado<>0 
+            AND C.idPaciente=$idPaciente 
+			AND date_format(C.fechaHoraCita, '%Y%m')=date_format('$fecha', '%Y%m');";
+            $result = mysqli_query($cnx, $sql);
+            $Lista = array();
+            while ($fila = mysqli_fetch_assoc($result)) {
+                $Lista[] = array(
+                    'cantidad' => $fila['cantidad']
+                );
+            }
+						
+			$stat[0] = true;
+			$stat[1] = "Lista";
+			$stat[2] = $Lista;
+			
+			
+        } catch (Exception $exc) {
+           
+			$stat[0] = false;
+			$stat[1] = $ex->getTraceAsString();
+			$stat[2] = ['error'];
+			return $stat;
+        }
+        return $stat;
+		
+	}
+	
+	
 	public function BuscarCita(CitasBean $objcitasbean)
 	{
 
@@ -94,6 +138,7 @@ class CitasDao
 						'paciente' => $row['paciente'],
 						'fechaHoraCita' => $row['fechaHoraCita'],
 						'fechaHora' => $row['fechaHora'],
+						'idHistoria' => $row['idHistoria'],
 						'status' => $row['status']
 						
                     );	 
@@ -153,6 +198,7 @@ class CitasDao
 						'paciente' => $row['paciente'],
 						'fechaHoraCita' => $row['fechaHoraCita'],
 						'fechaHora' => $row['fechaHora'],
+						'idHistoria' => $row['idHistoria'],
 						'status' => $row['status']
 						
                     );	 
@@ -239,8 +285,8 @@ class CitasDao
 
             if (mysqli_stmt_affected_rows($stmt) > 0) {
                 
-               $stat[0] = true;
-				$stat[1] = "Success save especialidad";
+                $stat[0] = true;
+				$stat[1] = "Success save citas";
 				return $stat;
             } else {
                 $stat[0] = false;
